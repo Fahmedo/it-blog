@@ -1,19 +1,23 @@
 <script setup>
-import HeaderView from './views/header-footer/HeaderView.vue';
-import FooterView from './views/header-footer/FooterView.vue';
-import SideBar from './views/utilities/sidebar.vue';
-// import Comments from './views/utilities/comments.vue';
-// import CreatePost from './components/CreatePost.vue';
+import { onMounted } from 'vue';
+import HeaderView from './views/header-footer/headerview.vue';
+import SideBar from './views/utilities/SideBar.vue';
+import Loader from './views/utilities/Loader.vue';
+import { useUserStore } from './stores/user';
+
+const { autoLogin, authUser } = useUserStore();
+onMounted(() => {
+  autoLogin();
+});
 </script>
 
 <template>
   <div>
-    <HeaderView />
     <SideBar />
-    <!-- <CreatePost /> -->
+    <HeaderView />
+    <Loader />
+
     <RouterView />
-    <!-- <Comments /> -->
-    <FooterView />
   </div>
 </template>
 <style scoped></style>

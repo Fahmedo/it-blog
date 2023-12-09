@@ -10,13 +10,17 @@
 </template>
 
 <script setup>
-import { useUserStore } from '../stores/user'; // Adjust the path to your store
+import { useUserStore } from '../../stores/user'; // Adjust the path to your store
 import { ref } from 'vue';
 
-const userStore = useUserStore();
+const useUserStore = useUserStore();
 const token = ref(''); // Assign the verification token from the URL here
 
-const verifyEmail = () => {
-  userStore.verifyEmail(token.value);
+const verifyEmail = async () => {
+  try {
+    await useUserStore.verifyEmail();
+  } catch (error) {
+    throw error;
+  }
 };
 </script>

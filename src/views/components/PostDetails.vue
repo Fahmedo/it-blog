@@ -1,12 +1,12 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useBlogStore } from '../stores/blog';
+import { useBlogStore } from '../../stores/blog';
 
 const blogs = useBlogStore();
 const blogsData = ref(blogs.blogs);
-const getPosts = () => blogs.getBlogPosts();
+onMounted(() => blogs.getBlogPosts());
 </script>
 
 <template>

@@ -1,8 +1,20 @@
 // userStore.js
+
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { createToaster } from '@meforma/vue-toaster';
 
+const toaster = createToaster({
+  position: 'bottom',
+  duration: 5000,
+});
+
+const _URL = 'https://blog-api-g8u6.onrender.com/api/auth/';
 export const useUserStore = defineStore('user', {
+  // //////////////////////////////////////
+  /**
+   *@state
+   */
   state: () => ({
     user: {
       username: '',
@@ -14,73 +26,115 @@ export const useUserStore = defineStore('user', {
       password: '',
     },
     isEmailVerified: false,
-    _apiUrl: 'https://blog-api-g8u6.onrender.com/api/auth/',
+    currentUser: '',
+    loader: false,
+    authUser: false,
+    mobileView: false,
   }),
 
   // //////////////////////////////////////
   /**
-   *
+   *@actions
    */
   actions: {
     setUser(newUser) {
       this.user = newUser;
     },
-    async registerUser(userData) {
+    async registerUser(payload) {
       try {
-        await axios.post(`${this._apiUrl}register`, userData);
+        this.loader = true;
+        await axios.post(`${_URL}register`, payload);
         console.log('User registered successfully');
+        this.loader = false;
       } catch (error) {
-        console.error(
-          'Error registering user:',
-          error.response ? error.response.data : error.message
-        );
-        throw error;
+        this.loader = false;
+        toaster.error(error.response.data.message);
+        throw error.message;
       }
     },
 
     // //////////////////////////////////
-    async loginUser(userData) {
+    async loginUser(payload) {
       try {
-        await axios.post(`${this._apiUrl}login`, userData);
-        // Update isAuthenticated state based on successful login
-        this.isAuthenticated = true;
-        console.log('User logged in', userData);
-        // this.$toast.success(' succesfully', {
-        //   position: 'bottom',
-        //   duration: 2000,
-        // });
+        this.loader = true;
+        const res = await axios.post(`${_URL}login`, payload);
+        this.user.username = payload.username;
+        this.user.password = payload.password;
+        this.loader = false;
+        this.authUser = true;
+        this.currentUser = payload.username;
+        localStorage.setItem('user', JSON.stringify(this.user));
+        console.log(res);
       } catch (error) {
-        console.error(
-          'Login error:',
-          error.response ? error.response.data : error.message
-        );
-        throw error;
+        this.loader = false;
+        toaster.error(error.response.data.message);
+        throw error.message;
       }
     },
-
     // ///////////////////////////////////
-    async resetPassword() {
+    logout() {
+      this.currentUser = '';
+      this.user.password = null;
+      this.user.username = null;
+      this.authUser = false;
+      localStorage.removeItem('user');
+    },
+    // ///////////////////////////////////
+    async resetPassword(email) {
       try {
-        await axios.post(`${this._apiUrl}send-reset-password-email`);
-        console.log('password reset');
+        this.loader = true;
+        await axios.post(`${_URL}send-reset-password-email`, {
+          email,
+        });
+        this.loader = false;
+        toaster.success(`Password reset successfully`);
       } catch (error) {
-        console.log('Error resetting password');
-        throw error;
+        this.loader = false;
+        toaster.error(error.response.data.message);
+        throw error.message;
       }
     },
 
     // ///////////////////////////////////
     async verifyEmail(token) {
       try {
-        const response = await axios.put(`${this._apiUrl}verify-account`, {
+        this.loader = true;
+        const response = await axios.put(`${_URL}verify-account`, {
           token,
         });
+        this.loader = false;
         this.isEmailVerified = true;
-        console.log('Email verified', response.data);
+        toaster.success('Account verified');
+        router.push('/');
       } catch (error) {
-        console.log('Error verifying email');
-        throw error;
+        this.loader = false;
+        toaster.error(error.response.data.message);
+        throw error.message;
+      }
+    },
+    async autoLogin() {
+      let authToken = localStorage.getItem('user');
+      if (authToken) {
+        try {
+          this.loader = true;
+          const res = await axios.post(`${_URL}login`, JSON.parse(authToken));
+          this.user.username = authToken.username;
+          this.user.password = authToken.password;
+          this.loader = false;
+          this.authUser = true;
+          this.currentUser = authToken.username;
+          console.log(res);
+        } catch (error) {
+          this.loader = false;
+          throw error.message;
+        }
       }
     },
   },
+
+  // //////////////////////////////////////
+  /**
+   *@getters
+   */
+  getters: {},
 });
