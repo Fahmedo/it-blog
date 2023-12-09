@@ -1,9 +1,26 @@
-<script>
-import { RouterLink, RouterView } from 'vue-router';
+<script setup>
+import { RouterLink, useRouter } from 'vue-router';
+import { useUserStore } from '../../stores/user';
+import { storeToRefs } from 'pinia';
+
+const userData = useUserStore();
+const { authUser, mobileView } = storeToRefs(userData);
+const handleLogout = userData.logout;
+const router = useRouter();
+
+const logout = function () {
+  handleLogout();
+  router.replace('/');
+};
+// const user = localStorage.getItem('user');
 </script>
 
 <template>
-  <div class="w-[150px] h-[500px] pl-2 fixed top-[10%]" id="content">
+  <div
+    class="w-[200px] h-[100%] p-5 fixed top-[10%] hidden lg:md:flex bg-white"
+    :style="{ display: mobileView ? 'flex' : '' }"
+    id="content"
+  >
     <nav class="navigation">
       <ul class="text-red">
         <li class="list active">
@@ -17,29 +34,18 @@ import { RouterLink, RouterView } from 'vue-router';
           </RouterLink>
         </li>
 
-        <li class="list">
+        <li class="list" v-if="authUser">
           <b></b>
           <b></b>
-          <a href="#">
-            <span class="icons">
-              <ion-icon name="person-circle-outline"></ion-icon>
-              <span class="title">Profile</span>
-            </span>
-          </a>
-        </li>
-
-        <li class="list">
-          <b></b>
-          <b></b>
-          <a href="#">
+          <RouterLink to="/notification">
             <span class="icons">
               <ion-icon name="notifications-outline"></ion-icon>
               <span class="title"> Notification </span>
             </span>
-          </a>
+          </RouterLink>
         </li>
 
-        <li class="list">
+        <li class="list" v-if="authUser">
           <b></b>
           <b></b>
           <RouterLink to="/post/createPost">
@@ -53,20 +59,31 @@ import { RouterLink, RouterView } from 'vue-router';
         <li class="list">
           <b></b>
           <b></b>
-          <a href="#">
+          <RouterLink to="/settings">
             <span class="icons">
               <ion-icon name="settings-outline"></ion-icon>
               <span class="title"> Settings </span>
             </span>
+          </RouterLink>
+        </li>
+
+        <li class="list" v-if="authUser">
+          <b></b>
+          <b></b>
+          <a href="#" @click="logout">
+            <span class="icons">
+              <ion-icon name="log-out-outline"></ion-icon>
+              <span class="title"> logout</span>
+            </span>
           </a>
         </li>
 
-        <li class="list">
+        <li class="list" v-if="!authUser">
           <b></b>
           <b></b>
-          <RouterLink to="/login/signup">
+          <RouterLink to="/login">
             <span class="icons">
-              <ion-icon name="log-out-outline"></ion-icon>
+              <ion-icon name="log-in-outline"></ion-icon>
               <span class="title"> Login</span>
             </span>
           </RouterLink>
@@ -86,7 +103,6 @@ li:hover span {
   padding: 5px;
   background: black;
   color: white;
-  transform: rotateY(90deg);
   border-radius: 20px;
 }
 </style>

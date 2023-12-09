@@ -1,16 +1,6 @@
-<template>
-  <div>
-    <QuillEditor v-model="content" :options="editorOptions" />
-    <button class="bg-skyblue" @click="togglePreviewMode">
-      Toggle Preview
-    </button>
-    <button @click="saveDraft">Save Draft</button>
-    <div v-if="previewMode" class="preview" v-html="content"></div>
-  </div>
-</template>
-
 <script setup>
 import { ref } from 'vue';
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { QuillEditor } from '@vueup/vue-quill';
 
 const content = ref('');
@@ -35,12 +25,28 @@ const saveDraft = () => {
   console.log('Draft saved:', content.value);
 };
 </script>
+<template>
+  <div class="container">
+    Create post
 
-<style>
-.preview {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-top: 10px;
-  color: black;
-}
-</style>
+    <div>
+      <!-- <QuillEditor v-model="content" :options="editorOptions" />
+     -->
+      <QuillEditor toolbar="#my-toolbar">
+        <template #toolbar>
+          <div id="my-toolbar">
+            <!-- Add buttons as you would before -->
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+
+            <!-- But you can also add your own -->
+            <button id="custom-button"></button>
+          </div>
+        </template>
+      </QuillEditor>
+    </div>
+  </div>
+</template>
+
+<style scoped></style>

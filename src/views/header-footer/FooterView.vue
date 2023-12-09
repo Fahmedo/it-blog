@@ -1,9 +1,7 @@
-<script>
-import { RouterLink, RouterView } from 'vue-router';
-</script>
+<script setup></script>
 
 <template>
-  <div></div>
+  <div class="footer">copy write Da_horlie 2023</div>
 </template>
 
-<style lang="sass" scoped></style>
+<style scoped></style>
