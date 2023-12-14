@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import HeaderView from './views/header-footer/headerview.vue';
+import HeaderView from './views/header-footer/Header.vue';
 import SideBar from './views/utilities/SideBar.vue';
 import Loader from './views/utilities/Loader.vue';
 import { useUserStore } from './stores/user';
@@ -12,12 +12,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <SideBar />
-    <HeaderView />
-    <Loader />
-
-    <RouterView />
-  </div>
+  <SideBar />
+  <HeaderView />
+  <Loader />
+  <RouterView />
 </template>
 <style scoped></style>

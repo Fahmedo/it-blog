@@ -13,6 +13,7 @@
 body {
   background: #e7e2e2;
   position: relative;
+  height: 100vh;
 }
 a {
   text-decoration: none;
@@ -128,11 +129,14 @@ label {
   transform: scale(1.01, 1.1);
 }
 .card {
+  position: relative;
   background: #fff;
   max-width: 400px;
-  height: max-content;
+  height: fit-content;
   padding: 10px;
+  padding-bottom: 40px;
   border-radius: 10px;
+  top: 4rem;
 }
 .card .button {
   margin-top: 20px;

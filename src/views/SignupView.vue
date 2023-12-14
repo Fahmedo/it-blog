@@ -139,7 +139,7 @@ const schema = yup.object({
         <button class="button my-3" @click="register">signup</button>
       </div>
       <div class="flex float-left left-10 mt-4">
-        <div>
+        <div class="relative p-4">
           Already a user
           <RouterLink
             to="/login"

@@ -11,7 +11,7 @@ const { mobileView, authUser, user } = storeToRefs(userData);
 
 <template>
   <div
-    class="header fixed w-[100%] h-[100px] flex p-0 pt-4 lg:pt-[1re] lg:pb-[3rem] lg:px-[3rem] justify-between z-10 bg-white"
+    class="fixed w-[100%] h-[80px] flex p-0 pt-4 lg:pt-[1rem] lg:pb-[3rem] lg:px-[3rem] justify-between z-10 bg-white mb-10"
   >
     <RouterLink to="/" class="logo">
       <img src="../../assets/Black-logo.svg" class="w-42 h-12" />
