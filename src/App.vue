@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import HeaderView from './views/header-footer/headerview.vue';
+import HeaderView from './views/header-footer/Headerview.vue';
 import SideBar from './views/utilities/SideBar.vue';
 import Loader from './views/utilities/Loader.vue';
 import { useUserStore } from './stores/user';
