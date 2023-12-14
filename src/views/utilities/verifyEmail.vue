@@ -13,12 +13,12 @@
 import { useUserStore } from '../../stores/user'; // Adjust the path to your store
 import { ref } from 'vue';
 
-const useUserStore = useUserStore();
+const useUser = useUserStore();
 const token = ref(''); // Assign the verification token from the URL here
 
 const verifyEmail = async () => {
   try {
-    await useUserStore.verifyEmail();
+    await useUser.verifyEmail();
   } catch (error) {
     throw error;
   }
