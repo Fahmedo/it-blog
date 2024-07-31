@@ -1,22 +1,25 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useBlogStore } from '../../stores/blog';
+import { useBlogStore } from '@/stores/blog';
+import { storeToRefs } from 'pinia';
 
-const blogs = useBlogStore();
-const blogsData = ref(blogs.blogs);
-onMounted(() => blogs.getBlogPosts());
+const route = useRoute();
+const useBlogs = useBlogStore();
+const { blogs, getBlogPostsById } = storeToRefs(useBlogs);
+
+onMounted(() => getBlogPostsById(route.params.id));
 </script>
 
 <template>
   <RouterView>
     <div class="container">
       <div>post details</div>
-      <div class="content">
-        <div class="post-">{{ blogsData.media }}</div>
-        <h1 class="title">{{ blogsData.title }}</h1>
-        <div class="post-content">{{ blogsData.content }}</div>
+      <div class="content" v-for="data in blogs">
+        <div class="post-">{{ data.BlogTitle }}</div>
+        <h1 class="title">{{ data.blogImage }}</h1>
+        <div class="post-content">{{ data.BlogText }}</div>
       </div>
     </div>
   </RouterView>

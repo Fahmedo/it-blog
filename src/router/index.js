@@ -11,7 +11,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/postsDetails/:postId',
+      path: '/postsDetails/:id',
       name: 'posts',
       component: () => import('../views/components/PostDetails.vue'),
       meta: { auth: true },

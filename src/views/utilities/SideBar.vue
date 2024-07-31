@@ -17,11 +17,11 @@ const logout = function () {
 
 <template>
   <div
-    class="w-[200px] h-[100%] p-5 fixed top-[10%] hidden lg:md:flex bg-white"
+    class="w-[200px] h-[100%] p-5 fixed hidden lg:md:flex bg-white z-10"
     :style="{ display: mobileView ? 'flex' : '' }"
     id="content"
   >
-    <nav class="navigation">
+    <nav class="navigation mt-12">
       <ul class="text-red">
         <li class="list active">
           <b></b>

@@ -16,6 +16,7 @@
     "@vueup/vue-quill": "^1.2.0",
     "autoprefixer": "^10",
     "axios": "^1.4.0",
+    "ionicons": "^7.4.0",
     "pinia": "^2.1.6",
     "postcss": "^8",
     "quill-blot-formatter": "^1.0.5",

@@ -7,18 +7,6 @@ import PostViewsVue from './PostViews.vue';
   <div class="container" id="container">
     <div class="mb-[50px] px-[10px] py-3">
       <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
-      <PostViewsVue />
     </div>
 
     <div class="justify-between flex">

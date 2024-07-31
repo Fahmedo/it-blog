@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { environment } from './environment';
 
 const _URL = 'https://blog-api-g8u6.onrender.com/api/';
 export const useBlogStore = defineStore('blog', {
@@ -11,13 +12,17 @@ export const useBlogStore = defineStore('blog', {
     loader: false,
     blogs: [
       {
-        title:
-          ' Why we need to plan ahead of projects. A write up givin details on what to know before starting a project idea',
-        content:
-          'Why we need to plan ahead of projects. A write up givin details on what to know before starting a project idea Why we need to plan ahead of projects. A write up givin details on what to know before starting a project idea Why we need to plan ahead of projects. A write up givin details on what to know before starting a project idea',
-        media: [
-          'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?cs=srgb&dl=pexels-mohamed-abdelghaffar-771742.jpg&fm=jpg',
-        ],
+        id: '',
+        BlogTitle: '',
+        BlogText: '',
+        createdate: '',
+        likedBy: '',
+        blogImage: '',
+        author: {
+          id: '',
+          authorName: '',
+          profileImage: '',
+        },
       },
     ],
     createPost: [
@@ -42,9 +47,23 @@ export const useBlogStore = defineStore('blog', {
     async getBlogPosts() {
       try {
         this.loader = true;
-        await axios.get(`${_URL}blogs`, Response);
+        const res = await axios.get(`${environment.BASE_URL}blog/post`);
         this.loader = false;
-        console.log('successfully load posts');
+        this.blogs = res.data;
+      } catch (error) {
+        this.loader = false;
+        console.log(error.message);
+        throw error;
+      }
+    },
+
+    // //////////////////////////////////////
+    async getBlogPostsById(id) {
+      try {
+        this.loader = true;
+        const res = await axios.get(`${environment.BASE_URL}blog/post/${id}`);
+        this.loader = false;
+        this.blogs = res.data;
       } catch (error) {
         this.loader = false;
         console.log(error.message);

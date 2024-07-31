@@ -25,7 +25,7 @@ const loaderSpinner = useUserStore();
   height: 100vh;
   top: 0%;
   left: 50%;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.454);
   z-index: 999;
   transform: translate(-50%);
 }

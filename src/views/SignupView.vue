@@ -14,6 +14,8 @@ const router = useRouter();
 
 const { newUser, registerUser } = useUserStore();
 
+let viewPassword = ref(false);
+
 /////////////////////////////////////////////////
 const register = async () => {
   try {
@@ -25,10 +27,18 @@ const register = async () => {
   }
 };
 
+const viewPass = () => {
+  viewPassword.value = !viewPassword.value;
+  console.log(viewPassword);
+};
+
 const schema = yup.object({
   email: yup.string().required('email is required').email('not valid email'),
   username: yup.string().required('Username is required'),
-  password: yup.string().required('Password most contain a-z, @$%, 0-9').min(8),
+  password: yup
+    .string()
+    .required('Password most contain Upper and lower case, @$%, 0-9')
+    .min(8),
   confirm_password: yup
     .string()
     .required()
@@ -38,8 +48,9 @@ const schema = yup.object({
 
 <template>
   <div class="container w-[200px] md:lg:[50%]" id="container">
-    <Form :validation-schema="schema">
+    <Form :validation-schema="schema" @submit="register">
       <div class="card">
+        <h2 class="text-center font-bold text-2xl">Register</h2>
         <Field
           class="border-grey-500 border-2"
           name="email"
@@ -50,7 +61,7 @@ const schema = yup.object({
             <input
               class="input"
               type="email"
-              v-model="newUser.email"
+              v-model="newUser.username"
               placeholder="example@mail.com"
               v-bind="field"
             />
@@ -68,23 +79,49 @@ const schema = yup.object({
 
         <Field
           class="border-grey-500 border-2"
-          name="username"
+          name="firstName"
           v-slot="{ field, errors, errorMessage }"
         >
           <div class="group">
-            <label>Username</label>
+            <label>First Name</label>
             <input
               class="input"
               type="text"
-              v-model="newUser.username"
-              placeholder="Username"
+              v-model="newUser.firstName"
+              placeholder="First name"
               v-bind="field"
             />
             <span class="highlight"></span>
             <span class="bar"></span>
           </div>
           <div
-            name="username"
+            name="firstName"
+            v-if="errors.length !== 0"
+            class="text-red-500 font-bold text-xs"
+          >
+            {{ errorMessage }}
+          </div>
+        </Field>
+
+        <Field
+          class="border-grey-500 border-2"
+          name="lastName"
+          v-slot="{ field, errors, errorMessage }"
+        >
+          <div class="group">
+            <label>Last Name</label>
+            <input
+              class="input"
+              type="text"
+              v-model="newUser.lastName"
+              placeholder="Last name"
+              v-bind="field"
+            />
+            <span class="highlight"></span>
+            <span class="bar"></span>
+          </div>
+          <div
+            name="lastName"
             v-if="errors.length !== 0"
             class="text-red-500 font-bold text-xs"
           >
@@ -97,11 +134,17 @@ const schema = yup.object({
             <label>Password</label>
             <input
               class="input"
-              type="password"
               v-model="newUser.password"
               placeholder="Password"
               v-bind="field"
+              :type="viewPassword ? 'text' : 'password'"
             />
+            <div
+              class="cursor-pointer absolute top-2 right-0 text-gray-500 hover:text-gray-600 transition duration-200 text-sm"
+              @click="viewPass"
+            >
+              {{ viewPassword ? 'Hide' : 'Show' }}
+            </div>
             <span class="highlight"></span>
             <span class="bar"></span>
           </div>
@@ -119,11 +162,17 @@ const schema = yup.object({
             <label>Confirm Password</label>
             <input
               class="input"
-              type="password"
               v-model="newUser.password"
               placeholder="Confirm Password"
               v-bind="field"
+              :type="viewPassword ? 'text' : 'password'"
             />
+            <div
+              class="cursor-pointer absolute top-2 right-0 text-gray-500 hover:text-gray-600 transition duration-200 text-sm"
+              @click="viewPass"
+            >
+              {{ viewPassword ? 'Hide' : 'Show' }}
+            </div>
             <span class="highlight"></span>
             <span class="bar"></span>
           </div>
@@ -143,7 +192,7 @@ const schema = yup.object({
           Already a user
           <RouterLink
             to="/login"
-            class="text-white bg-red-500 rounded-sm p-1 cursor-pointer hover:border-black border-2"
+            class="text-white bg-[#5264ae] rounded-md p-1 cursor-pointer hover:border-sky-700 border-1"
             >Login</RouterLink
           >
         </div>

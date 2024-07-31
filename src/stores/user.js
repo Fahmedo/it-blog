@@ -3,13 +3,13 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import { createToaster } from '@meforma/vue-toaster';
+import { environment } from './environment';
 
 const toaster = createToaster({
-  position: 'bottom',
+  position: 'top',
   duration: 5000,
 });
 
-const _URL = 'https://blog-api-g8u6.onrender.com/api/auth/';
 export const useUserStore = defineStore('user', {
   // //////////////////////////////////////
   /**
@@ -21,14 +21,15 @@ export const useUserStore = defineStore('user', {
       password: '',
     },
     newUser: {
+      firstName: '',
+      lastName: '',
       username: '',
-      email: '',
       password: '',
     },
     isEmailVerified: false,
     currentUser: '',
     loader: false,
-    authUser: false,
+    authtoken: localStorage.getItem('userToken') || null,
     mobileView: false,
   }),
 
@@ -43,9 +44,9 @@ export const useUserStore = defineStore('user', {
     async registerUser(payload) {
       try {
         this.loader = true;
-        await axios.post(`${_URL}register`, payload);
-        console.log('User registered successfully');
+        await axios.post(`${environment.BASE_URL}register`, payload);
         this.loader = false;
+        toaster.success('User registered successfully');
       } catch (error) {
         this.loader = false;
         toaster.error(error.response.data.message);
@@ -57,14 +58,17 @@ export const useUserStore = defineStore('user', {
     async loginUser(payload) {
       try {
         this.loader = true;
-        const res = await axios.post(`${_URL}login`, payload);
+        const res = await axios.post(`${environment.BASE_URL}login`, payload);
         this.user.username = payload.username;
         this.user.password = payload.password;
         this.loader = false;
-        this.authUser = true;
-        this.currentUser = payload.username;
-        localStorage.setItem('user', JSON.stringify(this.user));
-        console.log(res);
+        toaster.success('User Login successfully');
+        this.currentUser = res.data.firstName;
+        localStorage.setItem(
+          'userToken',
+          JSON.stringify(res.data.access_token)
+        );
+        console.log(res, payload);
       } catch (error) {
         this.loader = false;
         toaster.error(error.response.data.message);
@@ -76,14 +80,13 @@ export const useUserStore = defineStore('user', {
       this.currentUser = '';
       this.user.password = null;
       this.user.username = null;
-      this.authUser = false;
-      localStorage.removeItem('user');
+      localStorage.removeItem('userToken');
     },
     // ///////////////////////////////////
     async resetPassword(email) {
       try {
         this.loader = true;
-        await axios.post(`${_URL}send-reset-password-email`, {
+        await axios.post(`${environment.BASE_URL}reset-password`, {
           email,
         });
         this.loader = false;
@@ -99,9 +102,12 @@ export const useUserStore = defineStore('user', {
     async verifyEmail(token) {
       try {
         this.loader = true;
-        const response = await axios.put(`${_URL}verify-account`, {
-          token,
-        });
+        const response = await axios.put(
+          `${environment.BASE_URL}verify-account`,
+          {
+            token,
+          }
+        );
         this.loader = false;
         this.isEmailVerified = true;
         toaster.success('Account verified');
@@ -117,7 +123,10 @@ export const useUserStore = defineStore('user', {
       if (authToken) {
         try {
           this.loader = true;
-          const res = await axios.post(`${_URL}login`, JSON.parse(authToken));
+          const res = await axios.post(
+            `${environment.BASE_URL}login`,
+            JSON.parse(authToken)
+          );
           this.user.username = authToken.username;
           this.user.password = authToken.password;
           this.loader = false;
@@ -136,5 +145,7 @@ export const useUserStore = defineStore('user', {
   /**
    *@getters
    */
-  getters: {},
+  getters: {
+    authUser: (state) => !!state.authtoken,
+  },
 });
