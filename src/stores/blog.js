@@ -25,6 +25,19 @@ export const useBlogStore = defineStore('blog', {
         },
       },
     ],
+    blog: {
+      id: '',
+      BlogTitle: '',
+      BlogText: '',
+      createdate: '',
+      likedBy: '',
+      blogImage: '',
+      author: {
+        id: '',
+        authorName: '',
+        profileImage: '',
+      },
+    },
     createPost: [
       {
         id: '',
@@ -49,7 +62,7 @@ export const useBlogStore = defineStore('blog', {
         this.loader = true;
         const res = await axios.get(`${environment.BASE_URL}blog/post`);
         this.loader = false;
-        this.blogs = res.data;
+        this.setNewPost(res.data);
       } catch (error) {
         this.loader = false;
         console.log(error.message);
@@ -63,7 +76,8 @@ export const useBlogStore = defineStore('blog', {
         this.loader = true;
         const res = await axios.get(`${environment.BASE_URL}blog/post/${id}`);
         this.loader = false;
-        this.blogs = res.data;
+        console.log(res.data);
+        this.blog = res.data;
       } catch (error) {
         this.loader = false;
         console.log(error.message);

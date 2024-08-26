@@ -7,22 +7,28 @@ import { storeToRefs } from 'pinia';
 const useBlog = useBlogStore();
 const { blogs } = storeToRefs(useBlog);
 const { getBlogPosts } = useBlog;
-const getPosts = () => getBlogPosts();
+const getPosts = async () => await getBlogPosts();
 
 onMounted(() => getPosts());
 </script>
 
 <template>
-  <div class="">
-    <ul>
+  <div class="container">
+    <ul v-if="blogs">
       <li
         v-for="data in blogs"
         :key="data.id"
-        class="my-[5px] lg:md:my-[10px] p-5 bg-white rounded hover:bg-slate-100"
+        class="my-[5px] lg:md:my-[10px] p-5 bg-white rounded-lg hover:bg-slate-100"
       >
         <RouterLink :to="'/postsDetails/' + data.id" class="content p-5 m-4">
-          <div class="p-1 border-4 border-black w-14 rounded-full">
-            <img :src="data.author.profileImage" alt="" class="rounded-full" />
+          <div
+            class="border-4 border-black w-14 h-14 rounded-full content-center"
+          >
+            <img
+              :src="data.author.profileImage"
+              alt=""
+              class="rounded-full w-12 h-12 object-center p-1"
+            />
           </div>
           <div class="flex text-xs space-x-10">
             <div class="font-bold">{{ data.author.authorName }}</div>

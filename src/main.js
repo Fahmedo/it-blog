@@ -9,7 +9,7 @@ import './assets/tailwind.css';
 const app = createApp(App);
 
 app.use(createPinia());
-app.use(Toaster);
 app.use(router);
+app.use(Toaster);
 
 app.mount('#app');

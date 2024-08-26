@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
 import { useUserStore } from '../stores/user';
 
 const router = createRouter({
@@ -8,11 +7,11 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: () => import('../views/PostViews.vue'),
     },
     {
       path: '/postsDetails/:id',
-      name: 'posts',
+      name: 'Posts',
       component: () => import('../views/components/PostDetails.vue'),
       meta: { auth: true },
     },
